@@ -1,0 +1,28 @@
+services:
+  - type: web
+    name: sytro-digital
+    runtime: docker
+    plan: free
+    region: oregon
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: APP_KEY
+        generateValue: true
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: "false"
+      - key: DB_CONNECTION
+        value: sqlite
+      - key: SESSION_DRIVER
+        value: database
+      - key: CACHE_STORE
+        value: database
+      - key: QUEUE_CONNECTION
+        value: database
+      - key: ADMIN_NAME
+        value: Administrador Sytro
+      - key: ADMIN_EMAIL
+        value: obandowilmer59@gmail.com
+      - key: ADMIN_INITIAL_PASSWORD
+        value: 78chocolate

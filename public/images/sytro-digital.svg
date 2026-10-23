@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 330" fill="none">
+  <defs>
+    <linearGradient id="aqua" x1="33" y1="11" x2="102" y2="57" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#20C2C8"/>
+      <stop offset="1" stop-color="#1AA9C1"/>
+    </linearGradient>
+    <linearGradient id="blue" x1="14" y1="42" x2="84" y2="118" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#17669A"/>
+      <stop offset="1" stop-color="#104B83"/>
+    </linearGradient>
+  </defs>
+  <g stroke-linecap="square" stroke-linejoin="round">
+    <path d="M185 12c-8 33-32 55-72 76l-67 35c-35 18-35 60 1 78l94 47c35 18 33 55-5 76l-72 40" stroke="url(#blue)" stroke-width="27"/>
+    <path d="M185 12c-8 33-32 55-72 76l-67 35c-35 18-35 60 1 78l94 47c35 18 33 55-5 76" stroke="url(#aqua)" stroke-width="10"/>
+    <path d="M65 93 113 68c35-19 59-42 72-68" stroke="#20BAC5" stroke-width="24"/>
+    <path d="M8 158c0 26 15 44 44 59l89 46c31 16 38 42 20 67" stroke="#17669A" stroke-width="18"/>
+    <path d="M56 320c-3-24 12-44 45-62l42-23" stroke="#104B83" stroke-width="22"/>
+  </g>
+  <text x="250" y="151" fill="#14538D" font-family="Arial, Helvetica, sans-serif" font-size="105" font-weight="700" letter-spacing="-4">Sytro</text>
+  <path d="M251 190h120" stroke="#21B6BE" stroke-width="6"/>
+  <text x="393" y="235" fill="#14538D" font-family="Arial, Helvetica, sans-serif" font-size="74" font-weight="400" letter-spacing="0">Digital</text>
+</svg>

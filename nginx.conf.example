@@ -1,0 +1,94 @@
+# Nginx Hardened Production Configuration for Sytro Digital
+# Recommended deployment configuration
+
+# HTTP -> HTTPS Redirect
+server {
+    listen 80;
+    listen [::]:80;
+    server_name sytrodigital.com www.sytrodigital.com;
+
+    # Allow Let's Encrypt ACME challenge
+    location /.well-known/acme-challenge/ {
+        root /var/www/sytro/public;
+    }
+
+    location / {
+        return 301 https://$host$request_uri;
+    }
+}
+
+# Production HTTPS Server
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+    server_name sytrodigital.com www.sytrodigital.com;
+
+    root /var/www/sytro/public;
+    index index.php;
+
+    # SSL Certificates (Configure with Certbot / Let's Encrypt)
+    # ssl_certificate /etc/letsencrypt/live/sytrodigital.com/fullchain.pem;
+    # ssl_certificate_key /etc/letsencrypt/live/sytrodigital.com/privkey.pem;
+
+    # Modern TLS Security Protocols & Ciphers
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers 'ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384';
+    ssl_prefer_server_ciphers on;
+    ssl_session_cache shared:SSL:10m;
+    ssl_session_timeout 1d;
+    ssl_session_tickets off;
+
+    # Maximum upload body size (align with Project upload limits)
+    client_max_body_size 10M;
+
+    # Security Headers at Web Server level
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header X-Frame-Options "DENY" always;
+    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+    add_header Cross-Origin-Opener-Policy "same-origin" always;
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always;
+
+    # Hide Nginx version
+    server_tokens off;
+
+    # Deny access to hidden files and directories (.env, .git, etc.)
+    location ~ /\.(?!well-known).* {
+        deny all;
+        access_log off;
+        log_not_found off;
+    }
+
+    # CRITICAL: Prevent PHP execution in storage and upload directories
+    location ~* /storage/.*\.php$ {
+        deny all;
+        access_log off;
+        log_not_found off;
+    }
+
+    # Front controller routing
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    # Static file caching
+    location ~* \.(jpg|jpeg|png|gif|ico|webp|svg|css|js|woff|woff2|ttf|eot)$ {
+        expires 30d;
+        add_header Cache-Control "public, no-transform";
+        access_log off;
+    }
+
+    # FastCGI PHP processing
+    location ~ \.php$ {
+        fastcgi_pass unix:/var/run/php/php8.3-fpm.sock; # Adjust PHP-FPM socket version as needed
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+        include fastcgi_params;
+
+        # Mitigate httpoxy vulnerability
+        fastcgi_param HTTP_PROXY "";
+
+        fastcgi_hide_header X-Powered-By;
+        fastcgi_buffers 16 16k;
+        fastcgi_buffer_size 32k;
+    }
+}

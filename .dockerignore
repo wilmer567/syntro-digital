@@ -1,0 +1,14 @@
+.git
+.github
+.vscode
+.claude
+.agents
+node_modules
+vendor
+.env
+.env.backup
+.phpunit.result.cache
+tests
+Dockerfile*
+docker-compose*
+*.md
