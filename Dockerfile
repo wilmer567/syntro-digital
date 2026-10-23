@@ -61,9 +61,17 @@ RUN php artisan storage:link --force || true
 # Default environment variables
 ENV APP_ENV=production
 ENV APP_DEBUG=false
-ENV PORT=8080
+ENV APP_KEY=base64:zYY3NMaAikWGc/cMPluNRAPgbzTKvd6K5S4kbQY/MIA=
+ENV DB_CONNECTION=sqlite
+ENV SESSION_DRIVER=database
+ENV CACHE_STORE=database
+ENV QUEUE_CONNECTION=database
+ENV ADMIN_NAME="Administrador Sytro"
+ENV ADMIN_EMAIL="obandowilmer59@gmail.com"
+ENV ADMIN_INITIAL_PASSWORD="78chocolate"
+ENV PORT=10000
 
-EXPOSE 8080
+EXPOSE 10000
 
 # Start command: run migrations, seeds and serve application
-CMD sh -c "php artisan migrate --force && php artisan db:seed --force && php artisan config:cache && php artisan route:cache && php artisan view:cache && php artisan serve --host=0.0.0.0 --port=${PORT:-8080}"
+CMD sh -c "php artisan migrate --force && php artisan db:seed --force && php artisan config:cache && php artisan route:cache && php artisan view:cache && php artisan serve --host=0.0.0.0 --port=${PORT:-10000}"
