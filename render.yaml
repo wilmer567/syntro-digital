@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: sytro-digital
+    name: syntro-digital
     runtime: docker
     plan: free
     region: oregon
