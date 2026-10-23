@@ -1,6 +1,6 @@
 # ==========================================
-# Optimized Dockerfile for Laravel + Vite
-# Compatible with Render Free Tier (512MB RAM)
+# Optimized Dockerfile for Laravel 13 + Vite
+# Compatible with Render Free Tier
 # ==========================================
 
 # Stage 1: Build frontend assets
@@ -11,28 +11,16 @@ RUN npm install
 COPY . .
 RUN npm run build
 
-# Stage 2: PHP Application Environment
-FROM php:8.3-cli-alpine
+# Stage 2: PHP Application Environment (Laravel 13 requires PHP >= 8.4)
+FROM php:8.4-cli-alpine
 
-# Install minimal runtime packages (lightweight, zero memory issues)
-RUN apk add --no-cache \
-    curl \
-    git \
-    unzip \
-    sqlite-dev \
-    libpng-dev \
-    oniguruma-dev \
-    libxml2-dev
+# Install minimal runtime tools
+RUN apk add --no-cache curl git unzip
 
-# Install only essential PHP extensions
-RUN docker-php-ext-install \
-    pdo \
-    pdo_sqlite \
-    mbstring \
-    bcmath \
-    opcache
+# Install bcmath & pcntl extensions
+RUN docker-php-ext-install bcmath pcntl
 
-# Get Composer binary
+# Get official Composer binary
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
@@ -50,14 +38,14 @@ ENV ADMIN_EMAIL="obandowilmer59@gmail.com"
 ENV ADMIN_INITIAL_PASSWORD="78chocolate"
 ENV PORT=10000
 
-# Copy application and pre-built frontend
+# Copy application and pre-built frontend assets
 COPY . .
 COPY --from=frontend /app/public/build ./public/build
 
 # Install PHP dependencies without dev dependencies
 RUN composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist
 
-# Prepare directories and sqlite database
+# Prepare directories and database
 RUN mkdir -p database storage/app/public storage/framework/cache/data storage/framework/sessions storage/framework/views storage/logs bootstrap/cache \
     && touch database/database.sqlite \
     && chmod -R 775 storage bootstrap/cache database \
