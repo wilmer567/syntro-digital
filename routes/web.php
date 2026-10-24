@@ -13,10 +13,13 @@ use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\HomeController;
+use App\Http\Middleware\TrackVisit;
 use Illuminate\Support\Facades\Route;
 
 // Public Routes
-Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/', [HomeController::class, 'index'])
+    ->middleware(TrackVisit::class)
+    ->name('home');
 Route::post('/contacto', [ContactController::class, 'store'])
     ->middleware('throttle:contact-form')
     ->name('contact.store');

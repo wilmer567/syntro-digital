@@ -74,6 +74,228 @@
         </div>
     </div>
 
+    <!-- Traffic & Visitors Section Header -->
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 8px; flex-wrap: wrap; gap: 12px;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(13, 181, 192, 0.15); display: flex; align-items: center; justify-content: center; color: #0db5c0; border: 1px solid rgba(13, 181, 192, 0.3);">
+                <svg style="width: 20px; height: 20px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+            </div>
+            <div>
+                <h3 style="font-size: 1.25rem; font-weight: 700; color: #ffffff; margin: 0;">Contador y Estadísticas de Visitas</h3>
+                <p style="margin: 0; color: #8fa2b6; font-size: 0.82rem;">Monitoreo en vivo de audiencia, dispositivos y tráfico web</p>
+            </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px; background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 20px; padding: 6px 14px;">
+            <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #10b981; box-shadow: 0 0 8px #10b981;"></span>
+            <span style="color: #34d399; font-size: 0.8rem; font-weight: 600;">Monitoreo en Vivo Activo</span>
+        </div>
+    </div>
+
+    <!-- Visits Stat Cards -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 18px;">
+        <!-- Total Visitas -->
+        <div class="admin-card" style="margin: 0; padding: 20px; border-top: 3px solid #0db5c0;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+                <span style="color: #8fa2b6; font-size: 0.8rem; font-weight: 600; text-transform: uppercase;">Total de Visitas</span>
+                <span style="background: rgba(13, 181, 192, 0.15); color: #0db5c0; width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                    <svg style="width: 18px; height: 18px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                </span>
+            </div>
+            <div style="font-size: 2.1rem; font-weight: 800; color: #ffffff;">{{ number_format($stats['visits_total']) }}</div>
+            <div style="color: #0db5c0; font-size: 0.8rem; margin-top: 4px;">Páginas vistas acumuladas</div>
+        </div>
+
+        <!-- Visitantes Únicos -->
+        <div class="admin-card" style="margin: 0; padding: 20px; border-top: 3px solid #6366f1;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+                <span style="color: #8fa2b6; font-size: 0.8rem; font-weight: 600; text-transform: uppercase;">Visitantes Únicos</span>
+                <span style="background: rgba(99, 102, 241, 0.15); color: #818cf8; width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                    <svg style="width: 18px; height: 18px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                </span>
+            </div>
+            <div style="font-size: 2.1rem; font-weight: 800; color: #ffffff;">{{ number_format($stats['visits_unique_total']) }}</div>
+            <div style="color: #818cf8; font-size: 0.8rem; margin-top: 4px;">Dispositivos individuales</div>
+        </div>
+
+        <!-- Visitas Hoy -->
+        <div class="admin-card" style="margin: 0; padding: 20px; border-top: 3px solid #10b981;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+                <span style="color: #8fa2b6; font-size: 0.8rem; font-weight: 600; text-transform: uppercase;">Visitas Hoy</span>
+                <span style="background: rgba(16, 185, 129, 0.15); color: #34d399; width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                    <svg style="width: 18px; height: 18px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </span>
+            </div>
+            <div style="font-size: 2.1rem; font-weight: 800; color: #ffffff;">{{ number_format($stats['visits_today']) }}</div>
+            <div style="color: #34d399; font-size: 0.8rem; margin-top: 4px;">{{ $stats['visits_unique_today'] }} únicos el día de hoy</div>
+        </div>
+
+        <!-- Últimos 7 Días -->
+        <div class="admin-card" style="margin: 0; padding: 20px; border-top: 3px solid #f4c77b;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+                <span style="color: #8fa2b6; font-size: 0.8rem; font-weight: 600; text-transform: uppercase;">Últimos 7 Días</span>
+                <span style="background: rgba(244, 199, 123, 0.15); color: #f4c77b; width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                    <svg style="width: 18px; height: 18px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+                </span>
+            </div>
+            <div style="font-size: 2.1rem; font-weight: 800; color: #ffffff;">{{ number_format($stats['visits_week']) }}</div>
+            <div style="color: #f4c77b; font-size: 0.8rem; margin-top: 4px;">Tráfico semanal activo</div>
+        </div>
+    </div>
+
+    <!-- Visits Analytics Detailed: Chart & Devices -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 18px;">
+        <!-- Left: 7-Day Chart -->
+        <div class="admin-card" style="margin: 0;">
+            <div class="admin-card-header">
+                <h3 class="admin-card-title">
+                    <svg style="width: 20px; height: 20px; color: #0db5c0;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/></svg>
+                    <span>Tendencia de Tráfico (Últimos 7 Días)</span>
+                </h3>
+            </div>
+
+            <div style="padding: 20px 8px 10px;">
+                <div style="display: flex; align-items: flex-end; justify-content: space-around; height: 160px; gap: 8px; padding-bottom: 8px; border-bottom: 1px solid var(--admin-border);">
+                    @foreach($dailyVisits as $day)
+                        @php
+                            $heightPercent = $maxDailyVisits > 0 ? max(10, round(($day['total'] / $maxDailyVisits) * 100)) : 10;
+                            if ($day['total'] === 0) $heightPercent = 6;
+                        @endphp
+                        <div style="flex: 1; display: flex; flex-direction: column; align-items: center; height: 100%; justify-content: flex-end;" title="{{ $day['day_name'] }} ({{ $day['day_label'] }}): {{ $day['total'] }} visitas ({{ $day['unique'] }} únicos)">
+                            <span style="font-size: 0.72rem; color: #8fa2b6; font-weight: 600; margin-bottom: 6px;">{{ $day['total'] }}</span>
+                            <div style="width: 80%; max-width: 36px; height: {{ $heightPercent }}%; background: linear-gradient(180deg, #0db5c0 0%, rgba(13, 181, 192, 0.2) 100%); border-radius: 6px 6px 0 0; border: 1px solid rgba(13, 181, 192, 0.5); border-bottom: none; transition: height 0.4s ease;"></div>
+                        </div>
+                    @endforeach
+                </div>
+                <!-- Labels below bars -->
+                <div style="display: flex; justify-content: space-around; gap: 8px; margin-top: 10px;">
+                    @foreach($dailyVisits as $day)
+                        <div style="flex: 1; text-align: center;">
+                            <div style="color: #ffffff; font-size: 0.78rem; font-weight: 600;">{{ $day['day_name'] }}</div>
+                            <div style="color: #8fa2b6; font-size: 0.68rem;">{{ $day['day_label'] }}</div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+
+        <!-- Right: Device Breakdown -->
+        <div class="admin-card" style="margin: 0; display: flex; flex-direction: column;">
+            <div class="admin-card-header">
+                <h3 class="admin-card-title">
+                    <svg style="width: 20px; height: 20px; color: #f4c77b;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                    <span>Dispositivos de Entrada</span>
+                </h3>
+            </div>
+            <div style="padding: 16px 0; display: flex; flex-direction: column; gap: 16px; flex-grow: 1; justify-content: center;">
+                @php
+                    $desktopCount = $deviceCounts['desktop'] ?? 0;
+                    $mobileCount = $deviceCounts['mobile'] ?? 0;
+                    $tabletCount = $deviceCounts['tablet'] ?? 0;
+                    $devTotal = max(1, $desktopCount + $mobileCount + $tabletCount);
+                    $desktopPct = round(($desktopCount / $devTotal) * 100);
+                    $mobilePct = round(($mobileCount / $devTotal) * 100);
+                    $tabletPct = round(($tabletCount / $devTotal) * 100);
+                @endphp
+
+                <!-- Desktop -->
+                <div>
+                    <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 6px;">
+                        <span style="color: #ffffff; display: flex; align-items: center; gap: 8px;">
+                            <svg style="width: 16px; height: 16px; color: #0db5c0;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                            Escritorio / PC
+                        </span>
+                        <span style="color: #8fa2b6; font-weight: 600;">{{ $desktopCount }} ({{ $desktopPct }}%)</span>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.06); height: 8px; border-radius: 4px; overflow: hidden;">
+                        <div style="background: #0db5c0; width: {{ $desktopPct }}%; height: 100%; border-radius: 4px;"></div>
+                    </div>
+                </div>
+
+                <!-- Mobile -->
+                <div>
+                    <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 6px;">
+                        <span style="color: #ffffff; display: flex; align-items: center; gap: 8px;">
+                            <svg style="width: 16px; height: 16px; color: #34d399;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                            Móviles (Smartphones)
+                        </span>
+                        <span style="color: #8fa2b6; font-weight: 600;">{{ $mobileCount }} ({{ $mobilePct }}%)</span>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.06); height: 8px; border-radius: 4px; overflow: hidden;">
+                        <div style="background: #34d399; width: {{ $mobilePct }}%; height: 100%; border-radius: 4px;"></div>
+                    </div>
+                </div>
+
+                <!-- Tablet -->
+                <div>
+                    <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 6px;">
+                        <span style="color: #ffffff; display: flex; align-items: center; gap: 8px;">
+                            <svg style="width: 16px; height: 16px; color: #c084fc;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                            Tablets
+                        </span>
+                        <span style="color: #8fa2b6; font-weight: 600;">{{ $tabletCount }} ({{ $tabletPct }}%)</span>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.06); height: 8px; border-radius: 4px; overflow: hidden;">
+                        <div style="background: #c084fc; width: {{ $tabletPct }}%; height: 100%; border-radius: 4px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Visits Table -->
+    @if($recentVisits->isNotEmpty())
+        <div class="admin-card" style="margin: 0;">
+            <div class="admin-card-header">
+                <h3 class="admin-card-title">
+                    <svg style="width: 20px; height: 20px; color: #34d399;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    <span>Registro Reciente de Visitas</span>
+                </h3>
+                <span style="color: #8fa2b6; font-size: 0.82rem;">Últimas {{ $recentVisits->count() }} interacciones</span>
+            </div>
+
+            <div class="admin-table-wrap">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Dispositivo</th>
+                            <th>Navegador / S.O.</th>
+                            <th>Ruta</th>
+                            <th>Visitante (Hash Anónimo)</th>
+                            <th style="text-align: right;">Fecha y Hora</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($recentVisits as $visit)
+                            <tr>
+                                <td>
+                                    @if($visit->device === 'mobile')
+                                        <span class="status-badge" style="background: rgba(52, 211, 153, 0.15); color: #34d399;">📱 Móvil</span>
+                                    @elseif($visit->device === 'tablet')
+                                        <span class="status-badge" style="background: rgba(192, 132, 252, 0.15); color: #c084fc;">📟 Tablet</span>
+                                    @else
+                                        <span class="status-badge" style="background: rgba(13, 181, 192, 0.15); color: #0db5c0;">💻 Escritorio</span>
+                                    @endif
+                                </td>
+                                <td style="font-weight: 500; color: #ffffff;">
+                                    {{ $visit->browser ?? 'Desconocido' }} <span style="color: #8fa2b6; font-size: 0.8rem;">({{ $visit->platform ?? 'Desconocido' }})</span>
+                                </td>
+                                <td>
+                                    <code style="color: #f4c77b; background: rgba(244, 199, 123, 0.1); padding: 2px 6px; border-radius: 4px; font-size: 0.8rem;">{{ $visit->url }}</code>
+                                </td>
+                                <td style="color: #8fa2b6; font-size: 0.8rem; font-family: monospace;">
+                                    #{{ substr($visit->ip_hash, 0, 10) }}...
+                                </td>
+                                <td style="text-align: right; color: #8fa2b6; font-size: 0.82rem;">
+                                    {{ $visit->created_at->format('d/m/Y H:i:s') }}
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    @endif
+
     <!-- Quick Sections Navigation -->
     <div class="admin-card">
         <div class="admin-card-header">
