@@ -8,6 +8,9 @@ use App\Models\Service;
 use App\Models\SiteSetting;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class AdminPanelTest extends TestCase
@@ -132,9 +135,9 @@ class AdminPanelTest extends TestCase
 
     public function test_admin_can_crud_projects(): void
     {
-        \Illuminate\Support\Facades\Storage::fake('public');
+        Storage::fake('public');
         $validImage = base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==');
-        $image = \Illuminate\Http\UploadedFile::fake()->createWithContent('project.png', $validImage);
+        $image = UploadedFile::fake()->createWithContent('project.png', $validImage);
 
         $response = $this->actingAs($this->admin)->post('/admin/projects', [
             'tag' => 'Finanzas',
@@ -152,7 +155,7 @@ class AdminPanelTest extends TestCase
         $project = Project::where('title', 'Billetera Virtual')->first();
         $this->assertNotNull($project->image);
         $this->assertSame('Pantalla principal de la billetera virtual.', $project->image_description);
-        \Illuminate\Support\Facades\Storage::disk('public')->assertExists($project->image);
+        Storage::disk('public')->assertExists($project->image);
 
         // Update and remove image
         $response = $this->actingAs($this->admin)->put("/admin/projects/{$project->id}", [
@@ -176,10 +179,10 @@ class AdminPanelTest extends TestCase
 
     public function test_admin_can_upload_and_remove_multiple_project_images(): void
     {
-        \Illuminate\Support\Facades\Storage::fake('public');
+        Storage::fake('public');
         $validImage = base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==');
-        $firstImage = \Illuminate\Http\UploadedFile::fake()->createWithContent('screen-one.png', $validImage);
-        $secondImage = \Illuminate\Http\UploadedFile::fake()->createWithContent('screen-two.png', $validImage);
+        $firstImage = UploadedFile::fake()->createWithContent('screen-one.png', $validImage);
+        $secondImage = UploadedFile::fake()->createWithContent('screen-two.png', $validImage);
 
         $this->actingAs($this->admin)->post('/admin/projects', [
             'tag' => 'Finanzas',
@@ -195,8 +198,8 @@ class AdminPanelTest extends TestCase
         $this->assertCount(2, $project->images);
         $this->assertSame('Página de inicio', $project->images[0]->description);
         $this->assertSame('Panel administrativo', $project->images[1]->description);
-        \Illuminate\Support\Facades\Storage::disk('public')->assertExists($project->images[0]->path);
-        \Illuminate\Support\Facades\Storage::disk('public')->assertExists($project->images[1]->path);
+        Storage::disk('public')->assertExists($project->images[0]->path);
+        Storage::disk('public')->assertExists($project->images[1]->path);
 
         $imageToRemove = $project->images[0];
         $imageToKeep = $project->images[1];
@@ -217,8 +220,8 @@ class AdminPanelTest extends TestCase
             'id' => $imageToKeep->id,
             'description' => 'Vista actualizada del panel administrativo',
         ]);
-        \Illuminate\Support\Facades\Storage::disk('public')->assertMissing($imageToRemove->path);
-        \Illuminate\Support\Facades\Storage::disk('public')->assertExists($imageToKeep->path);
+        Storage::disk('public')->assertMissing($imageToRemove->path);
+        Storage::disk('public')->assertExists($imageToKeep->path);
     }
 
     public function test_admin_can_view_descriptions_for_each_project_image(): void
@@ -287,12 +290,67 @@ class AdminPanelTest extends TestCase
 
     public function test_admin_can_trigger_firebase_sync(): void
     {
-        \Illuminate\Support\Facades\Http::fake([
-            '*' => \Illuminate\Support\Facades\Http::response(['status' => 'ok'], 200),
+        Http::fake([
+            '*' => Http::response(['status' => 'ok'], 200),
         ]);
 
         $response = $this->actingAs($this->admin)->post('/admin/firebase/sync');
         $response->assertRedirect();
         $response->assertSessionHas('status');
+    }
+
+    public function test_admin_can_delete_project_gallery_image_directly(): void
+    {
+        $project = Project::create([
+            'tag' => 'Finanzas',
+            'title' => 'Portal Cooperativa',
+            'description' => 'Descripción prueba',
+            'order' => 1,
+            'is_active' => true,
+        ]);
+
+        $image = $project->images()->create([
+            'path' => 'projects/sample.png',
+            'description' => 'Foto de prueba',
+        ]);
+
+        Storage::disk('public')->put('projects/sample.png', 'content');
+        Storage::disk('public')->assertExists('projects/sample.png');
+
+        $response = $this->actingAs($this->admin)
+            ->deleteJson("/admin/projects/{$project->id}/images/{$image->id}");
+
+        $response->assertOk()
+            ->assertJson(['success' => true]);
+
+        $this->assertDatabaseMissing('project_images', ['id' => $image->id]);
+        Storage::disk('public')->assertMissing('projects/sample.png');
+    }
+
+    public function test_admin_can_delete_project_main_image_directly(): void
+    {
+        $project = Project::create([
+            'tag' => 'Finanzas',
+            'title' => 'Portal Cooperativa',
+            'description' => 'Descripción prueba',
+            'image' => 'projects/main.png',
+            'image_description' => 'Foto principal',
+            'order' => 1,
+            'is_active' => true,
+        ]);
+
+        Storage::disk('public')->put('projects/main.png', 'content');
+        Storage::disk('public')->assertExists('projects/main.png');
+
+        $response = $this->actingAs($this->admin)
+            ->deleteJson("/admin/projects/{$project->id}/main-image");
+
+        $response->assertOk()
+            ->assertJson(['success' => true]);
+
+        $project->refresh();
+        $this->assertNull($project->image);
+        $this->assertNull($project->image_description);
+        Storage::disk('public')->assertMissing('projects/main.png');
     }
 }

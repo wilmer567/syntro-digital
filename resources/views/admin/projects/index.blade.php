@@ -144,31 +144,43 @@
 
                             <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; margin-bottom: 14px;">
                                 @if($project->image)
-                                    <div style="min-width: 0;">
+                                    <div style="min-width: 0; transition: all 0.25s ease;" data-image-tile>
                                         <div style="position: relative; border-radius: 8px; overflow: hidden; border: 1px solid var(--admin-border); height: 90px; background: #061524;">
                                             <img src="{{ $project->image_url }}" alt="{{ $project->image_description ?: $project->title }}" data-image-caption="{{ $project->image_description ?: $project->title }}" data-fullscreen-image role="button" tabindex="0" aria-label="Ver imagen completa: {{ $project->title }}" style="width: 100%; height: 100%; object-fit: cover; cursor: zoom-in;">
                                             <a href="{{ $project->image_url }}" target="_blank" style="position: absolute; bottom: 4px; right: 4px; background: rgba(0,0,0,0.7); color: #fff; padding: 2px 6px; font-size: 0.68rem; border-radius: 4px; text-decoration: none;">Ver ↗</a>
                                         </div>
                                         <label class="form-label" style="margin-top: 8px;">Descripción de la imagen</label>
                                         <textarea name="image_description" class="admin-textarea" rows="2" maxlength="1000" placeholder="Describe lo que aparece en esta imagen">{{ $project->image_description }}</textarea>
-                                        <label style="display: inline-flex; align-items: center; gap: 6px; margin-top: 6px; font-size: 0.8rem; color: #f87171; cursor: pointer;">
-                                            <input type="checkbox" name="remove_image" value="1" style="accent-color: #ef4444;">
-                                            <span>Eliminar</span>
-                                        </label>
+                                        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px; margin-top: 6px;">
+                                            <label style="display: inline-flex; align-items: center; gap: 5px; font-size: 0.78rem; color: #f87171; cursor: pointer;" title="Marcar para quitar cuando pulses Guardar">
+                                                <input type="checkbox" name="remove_image" value="1" data-remove-checkbox style="accent-color: #ef4444;">
+                                                <span>Marcar</span>
+                                            </label>
+                                            <button type="button" data-delete-image-now data-delete-url="{{ route('admin.projects.main-image.destroy', $project) }}" style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.45); color: #fca5a5; font-size: 0.74rem; font-weight: 600; padding: 3px 8px; border-radius: 4px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;" title="Eliminar esta foto inmediatamente">
+                                                <svg style="width: 12px; height: 12px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                                <span>Borrar ya</span>
+                                            </button>
+                                        </div>
                                     </div>
                                 @endif
                                 @foreach($project->images as $projectImage)
-                                    <div style="min-width: 0;">
+                                    <div style="min-width: 0; transition: all 0.25s ease;" data-image-tile>
                                         <div style="position: relative; border-radius: 8px; overflow: hidden; border: 1px solid var(--admin-border); height: 90px; background: #061524;">
                                             <img src="{{ $projectImage->url }}" alt="{{ $projectImage->description ?: $project->title }}" data-image-caption="{{ $projectImage->description ?: $project->title }}" data-fullscreen-image role="button" tabindex="0" aria-label="Ver imagen completa: {{ $project->title }}" style="width: 100%; height: 100%; object-fit: cover; cursor: zoom-in;">
                                             <a href="{{ $projectImage->url }}" target="_blank" style="position: absolute; bottom: 4px; right: 4px; background: rgba(0,0,0,0.7); color: #fff; padding: 2px 6px; font-size: 0.68rem; border-radius: 4px; text-decoration: none;">Ver ↗</a>
                                         </div>
                                         <label class="form-label" style="margin-top: 8px;">Descripción de la imagen</label>
                                         <textarea name="image_descriptions[{{ $projectImage->id }}]" class="admin-textarea" rows="2" maxlength="1000" placeholder="Describe lo que aparece en esta imagen">{{ $projectImage->description }}</textarea>
-                                        <label style="display: inline-flex; align-items: center; gap: 6px; margin-top: 6px; font-size: 0.8rem; color: #f87171; cursor: pointer;">
-                                            <input type="checkbox" name="remove_images[]" value="{{ $projectImage->id }}" style="accent-color: #ef4444;">
-                                            <span>Eliminar</span>
-                                        </label>
+                                        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px; margin-top: 6px;">
+                                            <label style="display: inline-flex; align-items: center; gap: 5px; font-size: 0.78rem; color: #f87171; cursor: pointer;" title="Marcar para quitar cuando pulses Guardar">
+                                                <input type="checkbox" name="remove_images[]" value="{{ $projectImage->id }}" data-remove-checkbox style="accent-color: #ef4444;">
+                                                <span>Marcar</span>
+                                            </label>
+                                            <button type="button" data-delete-image-now data-delete-url="{{ route('admin.projects.images.destroy', [$project, $projectImage]) }}" style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.45); color: #fca5a5; font-size: 0.74rem; font-weight: 600; padding: 3px 8px; border-radius: 4px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;" title="Eliminar esta foto inmediatamente">
+                                                <svg style="width: 12px; height: 12px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                                <span>Borrar ya</span>
+                                            </button>
+                                        </div>
                                     </div>
                                 @endforeach
                             </div>
@@ -336,6 +348,80 @@
             selectedFiles = [];
             input.value = '';
             updateSelection();
+        });
+    });
+
+    // 1-Click Direct Delete for Project Images
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+
+    document.querySelectorAll('[data-delete-image-now]').forEach((button) => {
+        button.addEventListener('click', async (e) => {
+            e.preventDefault();
+            const deleteUrl = button.dataset.deleteUrl;
+            if (!deleteUrl) return;
+
+            if (!confirm('¿Estás seguro de que deseas eliminar esta foto de forma inmediata?')) {
+                return;
+            }
+
+            const tile = button.closest('[data-image-tile]');
+            const originalText = button.innerHTML;
+            button.disabled = true;
+            button.innerHTML = '<span style="color: #fca5a5;">Borrando...</span>';
+
+            try {
+                const response = await fetch(deleteUrl, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken,
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+
+                if (response.ok) {
+                    if (tile) {
+                        tile.style.transition = 'all 0.35s ease';
+                        tile.style.opacity = '0';
+                        tile.style.transform = 'scale(0.85)';
+                        setTimeout(() => tile.remove(), 350);
+                    }
+                } else {
+                    alert('No se pudo eliminar la imagen. Por favor intenta nuevamente.');
+                    button.disabled = false;
+                    button.innerHTML = originalText;
+                }
+            } catch (err) {
+                // Fallback to form submit if fetch network error
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = deleteUrl;
+                form.innerHTML = `
+                    <input type="hidden" name="_token" value="${csrfToken}">
+                    <input type="hidden" name="_method" value="DELETE">
+                `;
+                document.body.appendChild(form);
+                form.submit();
+            }
+        });
+    });
+
+    // Visual feedback when marking checkbox for deletion upon save
+    document.querySelectorAll('[data-remove-checkbox]').forEach((checkbox) => {
+        checkbox.addEventListener('change', () => {
+            const tile = checkbox.closest('[data-image-tile]');
+            if (!tile) return;
+            const textarea = tile.querySelector('textarea');
+
+            if (checkbox.checked) {
+                tile.style.opacity = '0.35';
+                tile.style.filter = 'grayscale(100%)';
+                if (textarea) textarea.disabled = true;
+            } else {
+                tile.style.opacity = '1';
+                tile.style.filter = 'none';
+                if (textarea) textarea.disabled = false;
+            }
         });
     });
 </script>

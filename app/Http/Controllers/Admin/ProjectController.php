@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Project;
+use App\Models\ProjectImage;
 use App\Models\SiteSetting;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -120,15 +122,21 @@ class ProjectController extends Controller
         unset($validated['images'], $validated['new_image_descriptions'], $validated['image_descriptions'], $validated['remove_images']);
 
         // Check if user requested to remove existing image
-        if ($request->boolean('remove_image') && $project->image) {
-            Storage::disk('public')->delete($project->image);
+        if ($request->boolean('remove_image')) {
+            if ($project->image) {
+                Storage::disk('public')->delete($project->image);
+            }
             $validated['image'] = null;
             $validated['image_description'] = null;
         }
 
-        foreach ($project->images()->whereIn('id', $removeImages)->get() as $projectImage) {
-            Storage::disk('public')->delete($projectImage->path);
-            $projectImage->delete();
+        if (! empty($removeImages)) {
+            foreach ($project->images()->whereIn('id', $removeImages)->get() as $projectImage) {
+                if ($projectImage->path) {
+                    Storage::disk('public')->delete($projectImage->path);
+                }
+                $projectImage->delete();
+            }
         }
 
         foreach ($project->images()->get() as $projectImage) {
@@ -158,6 +166,51 @@ class ProjectController extends Controller
 
         return redirect()->route('admin.projects.index')
             ->with('status', 'Proyecto actualizado exitosamente.');
+    }
+
+    /**
+     * Delete an individual project gallery image.
+     */
+    public function destroyImage(Request $request, Project $project, ProjectImage $image): JsonResponse|RedirectResponse
+    {
+        if ($image->project_id !== $project->id) {
+            abort(404);
+        }
+
+        if ($image->path) {
+            Storage::disk('public')->delete($image->path);
+        }
+
+        $image->delete();
+
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json(['success' => true, 'message' => 'Foto eliminada exitosamente.']);
+        }
+
+        return redirect()->route('admin.projects.index')
+            ->with('status', 'Foto eliminada exitosamente.');
+    }
+
+    /**
+     * Delete the legacy main image of a project.
+     */
+    public function destroyMainImage(Request $request, Project $project): JsonResponse|RedirectResponse
+    {
+        if ($project->image) {
+            Storage::disk('public')->delete($project->image);
+        }
+
+        $project->update([
+            'image' => null,
+            'image_description' => null,
+        ]);
+
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json(['success' => true, 'message' => 'Foto eliminada exitosamente.']);
+        }
+
+        return redirect()->route('admin.projects.index')
+            ->with('status', 'Foto eliminada exitosamente.');
     }
 
     /**

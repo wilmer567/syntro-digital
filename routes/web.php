@@ -66,6 +66,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'auth.session'])->gr
     Route::post('/projects/header', [ProjectController::class, 'updateHeader'])->name('projects.header');
     Route::post('/projects', [ProjectController::class, 'store'])->name('projects.store');
     Route::put('/projects/{project}', [ProjectController::class, 'update'])->name('projects.update');
+    Route::delete('/projects/{project}/images/{image}', [ProjectController::class, 'destroyImage'])->name('projects.images.destroy');
+    Route::delete('/projects/{project}/main-image', [ProjectController::class, 'destroyMainImage'])->name('projects.main-image.destroy');
     Route::delete('/projects/{project}', [ProjectController::class, 'destroy'])->name('projects.destroy');
 
     // Contact Messages
